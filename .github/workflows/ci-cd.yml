@@ -33,4 +33,4 @@ jobs:
           branch: gh-pages         # The branch the action should deploy to.
           folder: dist             # The folder that should be deployed.
           clean: true              # Optional: clean the target branch before deploying
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAGES_DEPLOY_TOKEN }}
