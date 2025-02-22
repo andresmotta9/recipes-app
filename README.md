@@ -1,2 +1,3 @@
 # recipes-app
-This app will manage a recipes 
+
+This app will manage a recipes
