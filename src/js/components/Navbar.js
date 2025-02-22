@@ -5,7 +5,7 @@ export default function Navbar() {
   navbar.innerHTML = `
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="assets/icon.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+        <img src="assets/icon.png" alt="Logo of Recipe App" width="30" height="30" class="d-inline-block align-text-top">
         Recipe App
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
