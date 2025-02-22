@@ -38,18 +38,13 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.url.startsWith('chrome-extension://')) {
-    return; // Skip caching for chrome-extension requests
-  }
+  if (event.request.url.startsWith('chrome-extension://')) return;
 
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match(event.request).then((response) => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
+      caches
+        .match(event.request)
+        .then((response) => response || fetch(event.request))
     );
   } else {
     event.respondWith(

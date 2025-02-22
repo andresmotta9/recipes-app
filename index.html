@@ -4,61 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipe App</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#007bff" />
   </head>
   <body>
-    <div id="app">
-      <form id="add-recipe-form">
-        <input type="text" name="title" placeholder="Recipe Title" required />
-        <textarea
-          name="ingredients"
-          placeholder="Ingredients (comma separated)"
-          required
-        ></textarea>
-        <textarea
-          name="instructions"
-          placeholder="Instructions"
-          required
-        ></textarea>
-        <input
-          type="number"
-          name="preparationTime"
-          placeholder="Preparation Time (minutes)"
-          required
-        />
-        <input
-          type="text"
-          name="difficulty"
-          placeholder="Difficulty (e.g., Easy, Medium, Hard)"
-          required
-        />
-        <input type="number" name="servings" placeholder="Servings" required />
-        <input
-          type="text"
-          name="category"
-          placeholder="Category (e.g., Dessert)"
-          required
-        />
-        <input type="text" name="imageUrl" placeholder="Image URL" required />
-        <textarea name="notes" placeholder="Notes"></textarea>
-        <button type="submit">Add Recipe</button>
+    <div id="navbar"></div>
+    <div class="container" id="app">
+      <form id="add-recipe-form" class="mb-4">
+        <!-- Form content (inputs for title, ingredients, instructions, etc.) -->
       </form>
-      <div id="recipes-list"></div>
     </div>
-    <script src="bundle.js"></script>
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker
           .register('/service-worker.js', { scope: '/' })
-          .then(function (registration) {
+          .then((registration) => {
             console.log(
               'Service Worker registered with scope:',
               registration.scope
             );
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log('Service Worker registration failed:', error);
           });
       }

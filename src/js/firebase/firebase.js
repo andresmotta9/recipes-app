@@ -1,8 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import { getFirestore } from 'firebase/firestore'; // Import Firestore
+import { getFirestore } from 'firebase/firestore';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyCTMuIdf9I1O-6b0HoIRNq_knRSugF0v-o',
   authDomain: 'recipe-app-9a9d3.firebaseapp.com',
@@ -13,9 +12,8 @@ const firebaseConfig = {
   measurementId: 'G-TDHW67H4RX',
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const db = getFirestore(app); // Initialize Firestore
+const db = getFirestore(app);
 
-export { db }; // Export Firestore instance
+export { db };
