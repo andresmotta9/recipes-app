@@ -28,6 +28,9 @@ export default function RecipeItem(recipe, onDelete) {
         recipe.servings
       }</p>
       <p class="recipe-details"><strong>Notes:</strong> ${recipe.notes}</p>
+      <p class="recipe-details"><strong>Completed:</strong> ${
+        recipe.wasPreviouslyDone ? 'Yes' : 'No'
+      }</p>
     </div>
     <div class="recipe-footer">
       <button class="btn btn-secondary btn-edit" data-id="${
@@ -44,9 +47,9 @@ export default function RecipeItem(recipe, onDelete) {
     onDelete(recipe.id);
   });
 
-  // Edit button handler: open the modal pre-filled with recipe data
+  // Edit button handler (opens the modal pre-filled for editing)
   recipeCard.querySelector('.btn-edit').addEventListener('click', () => {
-    const editModal = Modal(recipe); // Pass the recipe object for editing
+    const editModal = Modal(recipe); // Pass the recipe object to pre-fill the form for editing
     document.body.appendChild(editModal);
   });
 
