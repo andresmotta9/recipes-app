@@ -1,3 +1,8 @@
-// index.scss
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap';
 @import 'base/reset';
+@import 'base/global';
+@import 'components/hero';
+@import 'components/navbar';
+@import 'components/recipe-item';
+@import 'components/recipe-item-list';
+@import 'components/modal';

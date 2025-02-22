@@ -1,90 +1,131 @@
+// main.js
 import '../scss/index.scss';
-import { db } from './firebase';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  doc,
-} from 'firebase/firestore';
+import { addRecipe } from './firebase/addRecipe';
+import { getRecipes } from './firebase/getRecipes';
+import { updateRecipe } from './firebase/updateRecipe';
+import { deleteRecipe } from './firebase/deleteRecipe';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import RecipeItemList from './components/RecipeItemList';
+import Swal from 'sweetalert2';
 
-// Function to add a recipe
-async function addRecipe(recipe) {
-  try {
-    const docRef = await addDoc(collection(db, 'recipes'), recipe);
-    console.log('Recipe added with ID: ', docRef.id);
-  } catch (error) {
-    console.error('Error adding recipe: ', error);
-  }
-}
-
-// Function to get all recipes
-async function getRecipes() {
-  const querySnapshot = await getDocs(collection(db, 'recipes'));
-  querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => `, doc.data());
-  });
-}
-
-// Function to update a recipe
-async function updateRecipe(recipeId, updatedRecipe) {
-  try {
-    const recipeRef = doc(db, 'recipes', recipeId);
-    await updateDoc(recipeRef, updatedRecipe);
-    console.log('Recipe updated successfully!');
-  } catch (error) {
-    console.error('Error updating recipe: ', error);
-  }
-}
-
-// Function to delete a recipe
-async function deleteRecipe(recipeId) {
-  try {
-    const recipeRef = doc(db, 'recipes', recipeId);
-    await deleteDoc(recipeRef);
-    console.log('Recipe deleted successfully!');
-  } catch (error) {
-    console.error('Error deleting recipe: ', error);
-  }
-}
-
-// Example recipe object
-const exampleRecipe = {
-  title: 'Chocolate Cake',
-  ingredients: ['2 cups of flour', '1 cup of sugar', '1 cup of cocoa powder'],
-  instructions: {
-    1: 'Preheat the oven to 350°F (175°C).',
-    2: 'Mix flour, sugar, and cocoa powder together.',
-  },
-  wasPreviouslyDone: false,
-  preparationTime: 45,
-  difficulty: 'Medium',
-  servings: 8,
-  category: 'Dessert',
-  imageUrl: 'http://example.com/image.jpg',
-  notes: 'Best served warm.',
-};
-
-// Add a new recipe
-addRecipe(exampleRecipe);
-
-// Retrieve all recipes
-getRecipes();
-
-// Update a recipe
-updateRecipe('RECIPE_ID', { title: 'Vanilla Cake' });
-
-// Delete a recipe
-deleteRecipe('RECIPE_ID');
+console.log('Main.js loaded');
 
 // DOM Elements
 const addRecipeForm = document.getElementById('add-recipe-form');
-const recipesList = document.getElementById('recipes-list');
+// We no longer use the "recipes-list" element from index.html since RecipeItemList creates its own container.
+const navbarContainer = document.getElementById('navbar');
+const appContainer = document.getElementById('app');
 
-// Event Listeners
-addRecipeForm.addEventListener('submit', (event) => {
+// Render the Navbar
+const navbar = Navbar();
+navbarContainer.appendChild(navbar);
+
+// Render the Hero Component
+const hero = Hero();
+appContainer.insertBefore(hero, addRecipeForm);
+
+// Render the Recipe List Component
+const recipeListComponent = RecipeItemList();
+appContainer.appendChild(recipeListComponent);
+
+// Define displayRecipes() to refresh the recipe list in the RecipeItemList component
+async function displayRecipes() {
+  const recipesListContainer = document.getElementById('recipesList'); // ensure RecipeItemList uses this id for its container
+  if (recipesListContainer) {
+    recipesListContainer.innerHTML = '';
+    await getRecipes(recipesListContainer, handleDelete);
+  }
+}
+
+async function handleDelete(recipeId) {
+  // Show the confirmation dialog using SweetAlert2
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this recipe?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await deleteRecipe(recipeId);
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Your recipe has been deleted.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      displayRecipes(); // Refresh the recipe list after deletion
+    } catch (error) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'There was an error deleting your recipe.',
+        icon: 'error',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
+  }
+}
+
+// Listen for the custom 'newRecipe' event from the modal (if using modal)
+window.addEventListener('newRecipe', async (e) => {
+  const newRecipe = e.detail;
+  try {
+    await addRecipe(newRecipe);
+    // Show success alert
+    Swal.fire({
+      title: 'Success!',
+      text: 'Your recipe has been created successfully!',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    displayRecipes();
+  } catch (error) {
+    console.error('Error adding recipe from modal:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'There was an error adding your recipe.',
+      icon: 'error',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
+});
+
+window.addEventListener('updateRecipe', async (e) => {
+  const { recipeId, updatedRecipe } = e.detail;
+  try {
+    await updateRecipe(recipeId, updatedRecipe);
+    Swal.fire({
+      title: 'Updated!',
+      text: 'Recipe updated successfully!',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    displayRecipes();
+  } catch (error) {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Failed to update recipe.',
+      icon: 'error',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
+});
+
+// Event Listener for the main add recipe form (if used)
+addRecipeForm.addEventListener('submit', async (event) => {
+  console.log('Form submitted');
   event.preventDefault();
+
   const title = event.target.elements['title'].value;
   const ingredients = event.target.elements['ingredients'].value.split(',');
   const instructions = event.target.elements['instructions'].value
@@ -116,40 +157,14 @@ addRecipeForm.addEventListener('submit', (event) => {
     notes,
   };
 
-  addRecipe(newRecipe);
-  event.target.reset();
+  try {
+    await addRecipe(newRecipe);
+    event.target.reset();
+    displayRecipes();
+  } catch (error) {
+    console.error('Error adding recipe:', error);
+  }
 });
 
-// Function to display recipes
-async function displayRecipes() {
-  recipesList.innerHTML = '';
-  const querySnapshot = await getDocs(collection(db, 'recipes'));
-  querySnapshot.forEach((doc) => {
-    const recipe = doc.data();
-    const recipeItem = document.createElement('div');
-    recipeItem.classList.add('recipe-item');
-    recipeItem.innerHTML = `
-      <h3>${recipe.title}</h3>
-      <p><strong>Ingredients:</strong> ${recipe.ingredients.join(', ')}</p>
-      <p><strong>Instructions:</strong></p>
-      <ol>
-        ${Object.values(recipe.instructions)
-          .map((instruction) => `<li>${instruction}</li>`)
-          .join('')}
-      </ol>
-      <p><strong>Preparation Time:</strong> ${
-        recipe.preparationTime
-      } minutes</p>
-      <p><strong>Difficulty:</strong> ${recipe.difficulty}</p>
-      <p><strong>Servings:</strong> ${recipe.servings}</p>
-      <p><strong>Category:</strong> ${recipe.category}</p>
-      <img src="${recipe.imageUrl}" alt="${recipe.title}" />
-      <p><strong>Notes:</strong> ${recipe.notes}</p>
-      <button onclick="deleteRecipe('${doc.id}')">Delete</button>
-    `;
-    recipesList.appendChild(recipeItem);
-  });
-}
-
-// Initial display of recipes
+// Initial display of recipes when page loads
 displayRecipes();
