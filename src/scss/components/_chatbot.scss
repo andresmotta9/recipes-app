@@ -21,11 +21,11 @@
 }
 
 .messages-container {
-  flex: 1; /* Allows the messages container to grow */
+  flex: 1;
   padding: 10px;
-  overflow-y: auto; /* Enables vertical scrolling */
+  overflow-y: auto;
   background: #f9f9f9;
-  max-height: 300px; /* Ensures a maximum height before scrolling */
+  max-height: 300px;
 }
 
 .input-container {

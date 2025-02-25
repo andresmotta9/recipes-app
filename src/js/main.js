@@ -26,7 +26,6 @@ appContainer.appendChild(hero);
 const recipeListComponent = RecipeItemList();
 appContainer.appendChild(recipeListComponent);
 
-// Correctly append chatbot without .then()
 Chatbot()
   .then((chatbotElement) => {
     if (chatbotElement) {
@@ -75,8 +74,6 @@ async function handleEdit(recipe) {
   document.body.appendChild(editModal);
 }
 
-// Listen for updates from chatbot or other components
 window.addEventListener('refreshRecipes', displayRecipes);
 
-// Initial display of recipes when page loads
 displayRecipes();

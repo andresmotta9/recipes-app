@@ -1,4 +1,3 @@
-// src/js/components/RecipeItem.js
 import Modal from './Modal';
 
 export default function RecipeItem(recipe, onDelete) {
@@ -42,14 +41,12 @@ export default function RecipeItem(recipe, onDelete) {
     </div>
   `;
 
-  // Delete button handler
   recipeCard.querySelector('.btn-delete').addEventListener('click', () => {
     onDelete(recipe.id);
   });
 
-  // Edit button handler (opens the modal pre-filled for editing)
   recipeCard.querySelector('.btn-edit').addEventListener('click', () => {
-    const editModal = Modal(recipe); // Pass the recipe object to pre-fill the form for editing
+    const editModal = Modal(recipe);
     document.body.appendChild(editModal);
   });
 

@@ -1,4 +1,3 @@
-// src/js/firebase/deleteRecipe.js
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 

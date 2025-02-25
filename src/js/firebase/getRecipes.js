@@ -1,4 +1,3 @@
-// src/js/firebase/getRecipes.js
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import RecipeItem from '../components/RecipeItem';

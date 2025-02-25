@@ -1,4 +1,3 @@
-// src/js/components/Modal.js
 export default function Modal(existingRecipe = null) {
   const overlay = document.createElement('div');
   overlay.classList.add('modal-overlay');
@@ -6,7 +5,6 @@ export default function Modal(existingRecipe = null) {
   const modalContent = document.createElement('div');
   modalContent.classList.add('modal-content');
 
-  // Modal header: title changes based on mode
   const header = document.createElement('div');
   header.classList.add('modal-header');
   header.innerHTML = `
@@ -15,7 +13,6 @@ export default function Modal(existingRecipe = null) {
   `;
   modalContent.appendChild(header);
 
-  // Modal body with form – pre-populate if editing
   const body = document.createElement('div');
   body.classList.add('modal-body');
   body.innerHTML = `
@@ -99,7 +96,6 @@ export default function Modal(existingRecipe = null) {
   modalContent.appendChild(body);
   overlay.appendChild(modalContent);
 
-  // Close functionality
   modalContent
     .querySelector('.modal-close')
     .addEventListener('click', () => overlay.remove());
@@ -107,19 +103,16 @@ export default function Modal(existingRecipe = null) {
     if (e.target === overlay) overlay.remove();
   });
 
-  // Basic sanitization function
   function sanitize(input) {
     const div = document.createElement('div');
     div.textContent = input;
     return div.innerHTML;
   }
 
-  // Form submission handling
   const form = modalContent.querySelector('#modal-add-recipe-form');
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    // Retrieve and sanitize form values
     const title = sanitize(form.elements['title'].value.trim());
     const ingredientsStr = sanitize(form.elements['ingredients'].value.trim());
     const instructionsStr = sanitize(
@@ -159,7 +152,7 @@ export default function Modal(existingRecipe = null) {
           acc[index + 1] = instruction.trim();
           return acc;
         }, {}),
-      // For update, preserve previous flags if available
+
       wasPreviouslyDone: existingRecipe
         ? existingRecipe.wasPreviouslyDone
         : false,
@@ -172,13 +165,11 @@ export default function Modal(existingRecipe = null) {
     };
 
     if (existingRecipe) {
-      // Dispatch update event if in edit mode
       const updateEvent = new CustomEvent('updateRecipe', {
         detail: { recipeId: existingRecipe.id, updatedRecipe: recipeData },
       });
       window.dispatchEvent(updateEvent);
     } else {
-      // Dispatch new recipe event for creation
       const newRecipeEvent = new CustomEvent('newRecipe', {
         detail: recipeData,
       });

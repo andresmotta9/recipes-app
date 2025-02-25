@@ -1,4 +1,3 @@
-// src/js/utils/getChatbotAuthCode.js
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 const db = getFirestore();

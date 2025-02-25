@@ -1,4 +1,3 @@
-// eslint.config.js
 module.exports = [
   {
     files: ['*.js'],
@@ -6,12 +5,11 @@ module.exports = [
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
-        // Browser globals
         window: 'readonly',
         document: 'readonly',
         navigator: 'readonly',
         console: 'readonly',
-        // Node globals
+
         require: 'readonly',
         module: 'readonly',
         process: 'readonly',

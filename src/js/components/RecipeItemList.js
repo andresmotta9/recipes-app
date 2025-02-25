@@ -1,4 +1,3 @@
-// src/js/components/RecipeItemList.js
 import Modal from './Modal';
 
 export default function RecipeItemList() {
@@ -12,14 +11,11 @@ export default function RecipeItemList() {
     <div id="recipesList" class="recipe-list"></div>
   `;
 
-  // Setup the Add Recipe button to show the modal
   const addRecipeBtn = section.querySelector('#addRecipeBtn');
   addRecipeBtn.addEventListener('click', () => {
     const modal = Modal();
     document.body.appendChild(modal);
   });
-
-  // Do NOT call getRecipes() here—leave that to main.js
 
   return section;
 }

@@ -18,8 +18,8 @@
   padding: 20px;
   width: 90%;
   max-width: 500px;
-  max-height: 80vh; // Limits height to 80% of viewport
-  overflow-y: auto; // Enables vertical scrolling when needed
+  max-height: 80vh;
+  overflow-y: auto;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.3s ease-out;
 }
