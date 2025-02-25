@@ -15,9 +15,12 @@ console.log('Main.js loaded');
 const navbarContainer = document.getElementById('navbar');
 const appContainer = document.getElementById('app');
 
+if (!navbarContainer || !appContainer) {
+  console.error('Navbar or App container not found in the DOM.');
+}
+
 const navbar = Navbar();
 navbarContainer.appendChild(navbar);
-
 appContainer.appendChild(navbar);
 
 const hero = Hero();
@@ -45,6 +48,53 @@ async function displayRecipes() {
     await getRecipes(recipesListContainer, handleDelete, handleEdit);
   }
 }
+
+window.addEventListener('newRecipe', async (e) => {
+  try {
+    await addRecipe(e.detail);
+    await Swal.fire({
+      title: 'Recipe Added!',
+      text: 'Your new recipe has been saved successfully.',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    displayRecipes();
+  } catch (error) {
+    console.error('Error adding recipe via modal:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'There was an error adding your recipe.',
+      icon: 'error',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
+});
+
+window.addEventListener('updateRecipe', async (e) => {
+  try {
+    const { recipeId, updatedRecipe } = e.detail;
+    await updateRecipe(recipeId, updatedRecipe);
+    await Swal.fire({
+      title: 'Recipe Updated!',
+      text: 'Your recipe has been updated successfully.',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+    displayRecipes();
+  } catch (error) {
+    console.error('Error updating recipe via modal:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'There was an error updating your recipe.',
+      icon: 'error',
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
+});
 
 async function handleDelete(recipeId) {
   const result = await Swal.fire({
